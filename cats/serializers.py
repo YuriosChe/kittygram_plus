@@ -1,10 +1,16 @@
 from rest_framework import serializers
+from djoser.serializers import UserSerializer
 
 import datetime as dt
 import webcolors
 
-from .models import Cat, Owner, Achievement, AchievementCat, CHOICES
+from .models import Cat, Owner, Achievement, AchievementCat, CHOICES, User
 
+
+class CustomUserSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'id', 'username', 'first_name', 'last_name')
 class Hex2NameColor(serializers.Field):
     # При чтении данных ничего не меняем - просто возвращаем как есть
     def to_representation(self, value):
@@ -59,6 +65,12 @@ class CatSerializer(serializers.ModelSerializer):
                 achievement=current_achievement, cat=cat)
         return cat
 
+class CatListSerializer(serializers.ModelSerializer):
+    color = serializers.ChoiceField(choices=CHOICES)
+    
+    class Meta:
+        model = Cat
+        fields = ('id', 'name', 'color')
 class OwnerSerializer(serializers.ModelSerializer):
     '''добавили запись для того чтобы появлялись имена вместо айди котиков'''
     cats = serializers.StringRelatedField(many=True, read_only=True)

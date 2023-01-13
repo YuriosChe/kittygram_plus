@@ -12,6 +12,8 @@ class Achievement(models.Model):
 
     def __str__(self):
         return self.name
+class User(models.Model):
+    pass
 class Owner(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
